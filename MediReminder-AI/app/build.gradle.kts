@@ -43,6 +43,7 @@ android {
       isMinifyEnabled = true
       isShrinkResources = true
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+      buildConfigField("String", "API_BASE_URL", "\"https://medreminder-7vsk.onrender.com/\"")
       
       val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
       if (file(keystorePath).exists()) {
@@ -53,6 +54,7 @@ android {
     }
     debug {
       signingConfig = signingConfigs.getByName("debugConfig")
+      buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:3000/\"")
     }
   }
   compileOptions {

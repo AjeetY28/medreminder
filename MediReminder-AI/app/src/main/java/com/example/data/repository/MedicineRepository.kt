@@ -1,5 +1,7 @@
 package com.example.data.repository
 
+import com.example.BuildConfig
+
 import android.app.Activity
 import android.util.Log
 import com.example.data.ai.GeminiService
@@ -41,7 +43,7 @@ class MedicineRepository(
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:3000/")
+        .baseUrl(BuildConfig.API_BASE_URL)
         .client(httpClient)
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
