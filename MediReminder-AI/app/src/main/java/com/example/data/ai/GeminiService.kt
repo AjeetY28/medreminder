@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit
 
 object GeminiService {
     private const val TAG = "GeminiService"
+    private class QuotaExhaustedException : Exception("Quota exhausted")
     private const val BASE_API = "https://generativelanguage.googleapis.com/v1beta/models"
     // Model fallback chain: primary → progressively simpler models
     private val MODEL_CHAIN = listOf("gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite")
@@ -184,10 +185,11 @@ object GeminiService {
         for (modelName in MODEL_CHAIN) {
             try {
                 Log.d(TAG, "Sending request to Gemini API with model $modelName...")
-                val requestUrl = "$BASE_API/$modelName:generateContent?key=$apiKey"
+                val requestUrl = "$BASE_API/$modelName:generateContent"
 
                 val request = Request.Builder()
                     .url(requestUrl)
+                    .addHeader("X-goog-api-key", apiKey)
                     .post(requestBodyJson.toString().toRequestBody("application/json".toMediaType()))
                     .build()
 
@@ -195,6 +197,12 @@ object GeminiService {
                     if (!response.isSuccessful) {
                         val errorBody = response.body?.string() ?: "No error body"
                         Log.e(TAG, "Gemini API HTTP error with model $modelName: ${response.code} ${response.message}. Body: $errorBody")
+                        // If quota exhausted (429), skip remaining Gemini models immediately
+                        if (response.code == 429) {
+                            Log.w(TAG, "Gemini quota exhausted (429). Skipping remaining models, jumping to OpenAI fallback.")
+                            lastError = Exception("Gemini quota exhausted")
+                            throw QuotaExhaustedException()
+                        }
                         throw Exception("HTTP ${response.code}: $errorBody")
                     }
 
@@ -229,6 +237,8 @@ object GeminiService {
 
                     return@withContext parsed
                 }
+            } catch (e: QuotaExhaustedException) {
+                break // Exit the model chain loop immediately
             } catch (e: Exception) {
                 Log.e(TAG, "Error during extraction with model $modelName: ${e.message}", e)
                 lastError = e
@@ -384,9 +394,10 @@ object GeminiService {
         var lastError: Exception? = null
         for (modelName in MODEL_CHAIN) {
             try {
-                val requestUrl = "$BASE_API/$modelName:generateContent?key=$apiKey"
+                val requestUrl = "$BASE_API/$modelName:generateContent"
                 val request = Request.Builder()
                     .url(requestUrl)
+                    .addHeader("X-goog-api-key", apiKey)
                     .post(requestBodyJson.toString().toRequestBody("application/json".toMediaType()))
                     .build()
 
