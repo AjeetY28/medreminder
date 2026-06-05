@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const dns = require('dns');
 const logger = require('./logger');
 
 const connectionString = process.env.DATABASE_URL;
@@ -7,12 +8,18 @@ if (!connectionString) {
   logger.error('DATABASE_URL is missing from environment variables!');
 }
 
+const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production';
+
 const pool = new Pool({
   connectionString,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
   max: 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 5000,
+  // Force IPv4 to avoid ENETUNREACH on hosts that resolve to IPv6
+  lookup: (hostname, options, callback) => {
+    dns.lookup(hostname, { ...options, family: 4 }, callback);
+  },
 });
 
 pool.on('connect', () => {
