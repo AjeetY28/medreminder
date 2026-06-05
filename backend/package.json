@@ -1,0 +1,38 @@
+{
+  "name": "medireminder-ai-backend",
+  "version": "1.0.0",
+  "description": "Production-ready backend for medicine reminder platform called MediReminder AI",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.11.4",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "firebase-admin": "^13.10.0",
+    "google-auth-library": "^9.10.0",
+    "helmet": "^7.1.0",
+    "joi": "^17.13.1",
+    "json2csv": "^6.0.0-alpha.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.5",
+    "sharp": "^0.33.5",
+    "swagger-ui-express": "^5.0.0",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
+}

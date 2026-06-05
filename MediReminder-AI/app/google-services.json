@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "721672811820",
+    "project_id": "medreminder-cb24c",
+    "storage_bucket": "medreminder-cb24c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721672811820:android:84afda3bba3b131387a889",
+        "android_client_info": {
+          "package_name": "com.aistudio.mediremindai.xjzqwp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721672811820-1m40qbg5rhueigne1o1ppdsoklqasp4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGpeulwzDsCiiJN3UEz1UXWLSRkNf76II"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721672811820-1m40qbg5rhueigne1o1ppdsoklqasp4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
